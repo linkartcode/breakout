@@ -29,7 +29,8 @@ function EnterHighScoreState:enter(params)
 end
 
 function EnterHighScoreState:update(dt)
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') 
+        or love.keyboard.wasPressed('space') then
         -- update scores table
         local name = string.char(chars[1]) .. string.char(chars[2]) .. string.char(chars[3])
 
@@ -111,6 +112,6 @@ function EnterHighScoreState:render()
     love.graphics.setColor(1, 1, 1, 1)
     
     love.graphics.setFont(gFonts['small'])
-    love.graphics.printf('Press Enter to confirm!', 0, VIRTUAL_HEIGHT - 18,
+    love.graphics.printf('Press Enter or Space to confirm!', 0, VIRTUAL_HEIGHT - 18,
         VIRTUAL_WIDTH, 'center')
 end

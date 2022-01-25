@@ -42,7 +42,8 @@ function PaddleSelectState:update(dt)
     end
 
     -- select paddle and move on to the serve state, passing in the selection
-    if love.keyboard.wasPressed('return') or love.keyboard.wasPressed('enter') then
+    if love.keyboard.wasPressed('return') or love.keyboard.wasPressed('enter') 
+        or love.keyboard.wasPressed('space') then
         gSounds['confirm']:play()
 
         gStateMachine:change('serve', {
@@ -67,7 +68,7 @@ function PaddleSelectState:render()
     love.graphics.printf("Select your paddle with left and right!", 0, VIRTUAL_HEIGHT / 4,
         VIRTUAL_WIDTH, 'center')
     love.graphics.setFont(gFonts['small'])
-    love.graphics.printf("(Press Enter to continue!)", 0, VIRTUAL_HEIGHT / 3,
+    love.graphics.printf("(Press Enter or Space to select!)", 0, VIRTUAL_HEIGHT / 3,
         VIRTUAL_WIDTH, 'center')
         
     -- left arrow; should render normally if we're higher than 1, else

@@ -20,7 +20,8 @@ function GameOverState:enter(params)
 end
 
 function GameOverState:update(dt)
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') 
+    or love.keyboard.wasPressed('space') then
         -- see if score is higher than any in the high scores table
         local highScore = false
         
@@ -60,6 +61,6 @@ function GameOverState:render()
     love.graphics.setFont(gFonts['medium'])
     love.graphics.printf('Final Score: ' .. tostring(self.score), 0, VIRTUAL_HEIGHT / 2,
         VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Press Enter!', 0, VIRTUAL_HEIGHT - VIRTUAL_HEIGHT / 4,
+    love.graphics.printf('Press Enter or Space!', 0, VIRTUAL_HEIGHT - VIRTUAL_HEIGHT / 4,
         VIRTUAL_WIDTH, 'center')
 end

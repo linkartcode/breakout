@@ -32,7 +32,8 @@ function StartState:update(dt)
     end
 
     -- confirm whichever option we have selected to change screens
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') 
+            or love.keyboard.wasPressed('space') then
         gSounds['confirm']:play()
 
         if highlighted == 1 then
