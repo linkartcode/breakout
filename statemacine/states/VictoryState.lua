@@ -31,7 +31,8 @@ function VictoryState:update(dt)
     self.ball.y = self.paddle.y - 8
 
     -- go to play screen if the player presses Enter
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') 
+        or love.keyboard.wasPressed('space') then
         gStateMachine:change('serve', {
             level = self.level + 1,
             bricks = LevelMaker.createMap(self.level + 1),
@@ -58,6 +59,6 @@ function VictoryState:render()
 
     -- instructions text
     love.graphics.setFont(gFonts['medium'])
-    love.graphics.printf('Press Enter to serve!', 0, VIRTUAL_HEIGHT / 2,
+    love.graphics.printf('Press Space or Enter to serve!', 0, VIRTUAL_HEIGHT / 2,
         VIRTUAL_WIDTH, 'center')
 end

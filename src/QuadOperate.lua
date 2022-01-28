@@ -40,7 +40,7 @@ function table.slice(tbl, first, last, step)
 end
 
 function GenerateQuadsBricks(atlas)
-    return table.slice(GenerateQuads(atlas, 32, 16), 1, 21)
+    return table.slice(GenerateQuads(atlas, 32, 16), 1, 23)
 end
 
 function GenerateQuadsPaddles(atlas)

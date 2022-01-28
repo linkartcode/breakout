@@ -12,6 +12,7 @@
     the paddle, the player loses one heart. The Paddle can have a skin,
     which the player gets to choose upon starting the game.
 ]]
+BASE_WIDTH = 32
 
 Paddle = Class{}
 
@@ -28,18 +29,17 @@ function Paddle:init(skin)
 
     -- start us off with no velocity
     self.dx = 0
-
-    -- starting dimensions
-    self.width = 64
+    self:changeSize(2)
     self.height = 16
 
     -- the skin only has the effect of changing our color, used to offset us
     -- into the gPaddleSkins table later
     self.skin = skin
+end
 
-    -- the variant is which of the four paddle sizes we currently are; 2
-    -- is the starting size, as the smallest is too tough to start with
-    self.size = 2
+function Paddle:changeSize(size)
+    self.size = math.min(4, math.max(1, size))
+    self.width = self.size * BASE_WIDTH
 end
 
 function Paddle:update(dt)

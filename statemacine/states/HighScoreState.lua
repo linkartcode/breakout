@@ -30,7 +30,6 @@ end
 function HighScoreState:render()
     love.graphics.setFont(gFonts['large'])
     love.graphics.printf('High Scores', 0, 20, VIRTUAL_WIDTH, 'center')
-
     love.graphics.setFont(gFonts['medium'])
 
     -- iterate over all high score indices in our high scores table
@@ -50,7 +49,6 @@ function HighScoreState:render()
         love.graphics.printf(tostring(score), VIRTUAL_WIDTH / 2,
             60 + i * 13, 100, 'right')
     end
-
     love.graphics.setFont(gFonts['small'])
     love.graphics.printf("Press Escape to return to the main menu!",
         0, VIRTUAL_HEIGHT - 18, VIRTUAL_WIDTH, 'center')

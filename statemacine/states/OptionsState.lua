@@ -12,32 +12,50 @@
     Enter to begin.
 ]]
 
-PaddleSelectState = Class{__includes = BaseState}
+OptionsState = Class{__includes = BaseState}
 
-function PaddleSelectState:enter(params)
+function OptionsState:enter(params)
+    self.currentPaddle = params.currentPaddle or 1
+    self.music = params.music
     self.highScores = params.highScores
+    self.highlighted = 1
 end
 
-function PaddleSelectState:init()
-    -- the paddle we're highlighting; will be passed to the ServeState
-    -- when we press Enter
-    self.currentPaddle = 1
-end
-
-function PaddleSelectState:update(dt)
+function OptionsState:update(dt)
+    if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('down') then
+        self.highlighted = self.highlighted == 1 and 2 or 1
+    end
     if love.keyboard.wasPressed('left') then
-        if self.currentPaddle == 1 then
-            gSounds['no-select']:play()
+        if self.highlighted == 1 then
+            self.music = not self.music
+            if self.music then
+                gSounds['music']:play()
+            else
+                gSounds['music']:pause()
+            end
         else
-            gSounds['select']:play()
-            self.currentPaddle = self.currentPaddle - 1
+            if self.currentPaddle == 1 then
+                gSounds['no-select']:play()
+            else
+                gSounds['select']:play()
+                self.currentPaddle = self.currentPaddle - 1
+            end
         end
     elseif love.keyboard.wasPressed('right') then
-        if self.currentPaddle == 4 then
-            gSounds['no-select']:play()
+        if self.highlighted == 1 then
+            self.music = not self.music
+            if self.music then
+                gSounds['music']:play()
+            else
+                gSounds['music']:pause()
+            end
         else
-            gSounds['select']:play()
-            self.currentPaddle = self.currentPaddle + 1
+            if self.currentPaddle == 4 then
+                gSounds['no-select']:play()
+            else
+                gSounds['select']:play()
+                self.currentPaddle = self.currentPaddle + 1
+            end
         end
     end
 
@@ -46,14 +64,11 @@ function PaddleSelectState:update(dt)
         or love.keyboard.wasPressed('space') then
         gSounds['confirm']:play()
 
-        gStateMachine:change('serve', {
-            paddle = Paddle(self.currentPaddle),
-            bricks = LevelMaker.createMap(1),
-            health = 3,
-            score = 0,
-            highScores = self.highScores,
-            level = 1,
-            recoverPoints = 5000
+        gStateMachine:change('start', {
+           currentPaddle = self.currentPaddle,
+           highScores = self.highScores,
+           music = self.music,
+           highlighted = 2
         })
     end
 
@@ -62,13 +77,27 @@ function PaddleSelectState:update(dt)
     end
 end
 
-function PaddleSelectState:render()
+function OptionsState:render()
     -- instructions
     love.graphics.setFont(gFonts['medium'])
-    love.graphics.printf("Select your paddle with left and right!", 0, VIRTUAL_HEIGHT / 4,
+    love.graphics.printf("Select your options", 0, VIRTUAL_HEIGHT / 6, VIRTUAL_WIDTH, 'center')
+
+    local music_status = self.music and "ON" or "OFF"
+    
+    if self.highlighted == 1 then
+        love.graphics.setColor(103/255, 1, 1, 1)
+    end
+    love.graphics.printf("Music "..music_status, 0, VIRTUAL_HEIGHT / 3,
         VIRTUAL_WIDTH, 'center')
+    love.graphics.setColor(1, 1, 1, 1)
+    if self.highlighted == 2 then
+        love.graphics.setColor(103/255, 1, 1, 1)
+    end
+    love.graphics.printf("Select your paddle with left and right!", 0, VIRTUAL_HEIGHT / 2,
+        VIRTUAL_WIDTH, 'center')
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(gFonts['small'])
-    love.graphics.printf("(Press Enter or Space to select!)", 0, VIRTUAL_HEIGHT / 3,
+    love.graphics.printf("(Press Enter or Space to confirm!)", 0, VIRTUAL_HEIGHT - VIRTUAL_HEIGHT / 6,
         VIRTUAL_WIDTH, 'center')
         
     -- left arrow; should render normally if we're higher than 1, else
