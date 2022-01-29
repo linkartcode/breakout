@@ -1,4 +1,6 @@
-BASE_DY = 30
+
+
+POWER_UP_SPEED = 30
 
 Powerup = Class{}
 
@@ -9,7 +11,7 @@ function Powerup:init(x, y, type)
 	self.width = 16
 	self.height = 16
 	self.type = type
-	self.dy = BASE_DY
+	self.dy = POWER_UP_SPEED
 end
 
 function Powerup:update(dt)

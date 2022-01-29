@@ -14,10 +14,12 @@
     Over screen if at 0 health or the Serve screen otherwise.
 ]]
 
-CHANCE_BALLS = 10
+CHANCE_BALLS = 5
 CHANCE_PADDLE_REDUCE = 10
 CHANCE_PADDLE_INCREASE = 10
-CHANCE_EXTRA_LIFE = 2
+CHANCE_BALL_SPEED_UP = 10
+CHANCE_BALL_SPEED_DOWN = 10
+CHANCE_EXTRA_LIFE = 3
 CHANCE_KEY = 1
 
 PlayState = Class{__includes = BaseState}
@@ -35,11 +37,9 @@ function PlayState:enter(params)
     self.balls = Balls(params.ball)
     self.level = params.level
 
-    self.recoverPoints = 5000
-
     -- give ball random starting velocity
-    self.balls.balls[1].dx = math.random(-200, 200)
-    self.balls.balls[1].dy = math.random(-50, -60)
+    self.balls.balls[1].dx = math.random(-200 * math.sqrt(self.level) * 0.2, 200 * math.sqrt(self.level) * 0.2)
+    self.balls.balls[1].dy = math.random(-50, -70)
 
     self.powerups = {}
 end
@@ -101,11 +101,6 @@ function PlayState:update(dt)
                 brick:hit()
                 self:generatePowerUp(brick.x, brick.y)
 
-                -- if we have enough points, recover a point of health
-                --[[ if self.score > self.recoverPoints then
-                    self:healthPlus()
-                end ]]
-
                 -- go to our victory screen if there are no more bricks left
                 if self:checkVictory() then
                     gSounds['victory']:play()
@@ -116,8 +111,7 @@ function PlayState:update(dt)
                         health = self.health,
                         score = self.score,
                         highScores = self.highScores,
-                        ball = ball,
-                        recoverPoints = self.recoverPoints
+                        ball = ball
                     })
                 end
 
@@ -151,11 +145,8 @@ function PlayState:update(dt)
                     ball.y = brick.y + 16
                 end
 
-                -- slightly scale the y velocity to speed up the game, capping at +- 150
-                if math.abs(ball.dy) + math.abs(ball.dx) < 150 then
-                    ball.dy = ball.dy * 1.01
-                    ball.dx = ball.dx * 1.01
-                end
+                -- slightly scale the y velocity to speed up the game
+                    ball:speedInc()
                 break
             end
         end
@@ -182,8 +173,7 @@ function PlayState:update(dt)
                         health = self.health,
                         score = self.score,
                         highScores = self.highScores,
-                        level = self.level,
-                        recoverPoints = self.recoverPoints
+                        level = self.level
                     })
                 end
             end
@@ -248,6 +238,10 @@ end
 function PlayState:generatePowerUp(x, y)
     if getRandom(CHANCE_BALLS) then
         table.insert(self.powerups, Powerup(x, y, 8))
+    elseif getRandom(CHANCE_BALL_SPEED_UP) then
+        table.insert(self.powerups, Powerup(x, y, 4))
+    elseif getRandom(CHANCE_BALL_SPEED_DOWN) then
+        table.insert(self.powerups, Powerup(x, y, 5))
     elseif getRandom(CHANCE_EXTRA_LIFE) then
         table.insert(self.powerups, Powerup(x, y, 2))
     elseif getRandom(CHANCE_PADDLE_INCREASE) then
@@ -260,6 +254,10 @@ end
 function PlayState:powerupAct(type)
     if type == 2 then
         self:healthPlus()
+    elseif type == 4 then
+        self.balls:speedUp()
+    elseif type == 5 then
+        self.balls:speedDown()
     elseif type == 7 then
         self.paddle:changeSize(self.paddle.size + 1)
     elseif type == 6 then
@@ -271,6 +269,5 @@ end
 
 function PlayState:healthPlus()
     self.health = math.min(3, self.health + 1)
-    self.recoverPoints = self.recoverPoints + math.min(100000, self.recoverPoints * 2)
     gSounds['recover']:play()
 end

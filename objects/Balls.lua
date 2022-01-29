@@ -1,7 +1,9 @@
-Balls = Class{}
+
 
 MAX_BALLS = 9
-D_VELOCITY = 50
+D_VELOCITY = 9
+
+Balls = Class{}
 
 function Balls:init(ball)
 	self.balls = {}
@@ -12,7 +14,7 @@ function Balls:extra()
 	local tmp_balls = {}
 	for i, ball in pairs(self.balls) do
 		if (#self.balls + #tmp_balls + 2) < MAX_BALLS then
-			local velocity = math.abs(ball.dx) + math.abs(ball.dx)
+			local velocity = math.sqrt(ball.dx^2 + ball.dy^2)
 			local ball_dx = Ball(ball.skin)
 			local ball_dy = Ball(ball.skin)
 			if ball.dy > 0 then
@@ -45,6 +47,18 @@ function Balls:extra()
 		table.insert(tmp_balls, ball)
 	end
 	self.balls = tmp_balls
+end
+
+function Balls:speedUp()
+	for i, ball in pairs(self.balls) do
+		ball:speedUp()
+	end
+end
+
+function Balls:speedDown()
+	for i, ball in pairs(self.balls) do
+		ball:speedDown()
+	end
 end
 
 function Balls:update(dt)

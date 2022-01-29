@@ -1,17 +1,7 @@
---[[
-    GD50
-    Breakout Remake
 
-    -- Paddle Class --
-
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
-
-    Represents a paddle that can move left and right. Used in the main
-    program to deflect the ball toward the bricks; if the ball passes
-    the paddle, the player loses one heart. The Paddle can have a skin,
-    which the player gets to choose upon starting the game.
-]]
+-- paddle movement speed
+PADDLE_SPEED = 200
+-- size of size 1 paddle
 BASE_WIDTH = 32
 
 Paddle = Class{}

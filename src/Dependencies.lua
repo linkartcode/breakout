@@ -25,25 +25,18 @@ require 'objects/Powerup'
 -- a class used to generate our brick layouts (levels)
 require 'src/LevelMaker'
 
--- utility functions, mainly for splitting our sprite sheet into various Quads
--- of differing sizes for paddles, balls, bricks, etc.
 require 'src/QuadOperate'
-
---
---require 'src/Utils'
 
 -- a basic StateMachine class which will allow us to transition to and from
 -- game states smoothly and avoid monolithic code in one file
-require 'statemacine/StateMachine'
--- each of the individual states our game can be in at once; each state has
--- its own update and render methods that can be called by our state machine
--- each frame, to avoid bulky code in main.lua
-require 'statemacine/states/BaseState'
-require 'statemacine/states/EnterHighScoreState'
-require 'statemacine/states/GameOverState'
-require 'statemacine/states/HighScoreState'
-require 'statemacine/states/OptionsState'
-require 'statemacine/states/PlayState'
-require 'statemacine/states/ServeState'
-require 'statemacine/states/StartState'
-require 'statemacine/states/VictoryState'
+require 'statemachine/StateMachine'
+
+require 'statemachine/states/BaseState'
+require 'statemachine/states/EnterHighScoreState'
+require 'statemachine/states/GameOverState'
+require 'statemachine/states/HighScoreState'
+require 'statemachine/states/OptionsState'
+require 'statemachine/states/PlayState'
+require 'statemachine/states/ServeState'
+require 'statemachine/states/StartState'
+require 'statemachine/states/VictoryState'

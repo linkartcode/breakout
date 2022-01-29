@@ -1,32 +1,20 @@
---[[
-    GD50
-    Breakout Remake
 
-    -- Ball Class --
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
-
-    Represents a ball which will bounce back and forth between the sides
-    of the world space, the player's paddle, and the bricks laid out above
-    the paddle. The ball can have a skin, which is chosen at random, just
-    for visual variety.
-]]
+MAX_BALL_SPEED = 250
+MIN_BALL_SPEED = 60
+BALL_SPEED_DELTA = 10
+BALL_SPEED_INC = 4
 
 Ball = Class{}
 
 function Ball:init(skin)
-    -- simple positional and dimensional variables
+    
     self.width = 8
     self.height = 8
 
-    -- these variables are for keeping track of our velocity on both the
-    -- X and Y axis, since the ball can move in two dimensions
     self.dy = 0
     self.dx = 0
 
-    -- this will effectively be the color of our ball, and we will index
-    -- our table of Quads relating to the global block texture using this
     self.skin = skin
 end
 
@@ -90,4 +78,28 @@ function Ball:render()
     -- gBallFrames is a table of quads mapping to each individual ball skin in the texture
     love.graphics.draw(gTextures['main'], gFrames['balls'][self.skin],
         self.x, self.y)
+end
+
+function Ball:speedUp()
+    self:changeSpeed(BALL_SPEED_DELTA)
+end
+
+function Ball:speedDown()
+    self:changeSpeed(-BALL_SPEED_DELTA)
+end
+
+function Ball:speedInc()
+    self:changeSpeed(BALL_SPEED_INC)
+end
+
+function Ball:changeSpeed(delta)
+
+    local newSpeed = math.sqrt(self.dx^2 + self.dy^2) + delta
+    if newSpeed > MAX_BALL_SPEED or newSpeed < MIN_BALL_SPEED then
+        return
+    end
+    local dSpeed = math.sqrt(delta^2 / 2)
+    dSpeed = (delta > 0 and dSpeed or -dSpeed)
+    self.dx = self.dx + (self.dx > 0 and dSpeed or -dSpeed)
+    self.dy = self.dy + (self.dy > 0 and dSpeed or -dSpeed)
 end

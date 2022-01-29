@@ -43,8 +43,7 @@ function StartState:update(dt)
                 health = 3,
                 score = 0,
                 highScores = self.highScores,
-                level = 1,
-                recoverPoints = 5000
+                level = 1
             })
         elseif self.highlighted == 2 then
             gStateMachine:change('options', {
